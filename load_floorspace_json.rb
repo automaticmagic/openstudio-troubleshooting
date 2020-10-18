@@ -30,7 +30,16 @@ export_model_handle_mapping = mm.suggestHandleMapping(model, export_model)
 
 mm.mergeModels(model, export_model, export_model_handle_mapping)
 
-model.save('export_model.osm', true)
 model.save('model.osm', true)
+
+ft = OpenStudio::Model::ThreeJSForwardTranslator.new
+triangulate = true
+scene = ft.modelToThreeJS(model, triangulate)
+pretty_print = false
+json = scene.toJSON(pretty_print)
+
+File.open('model.json', 'w') do |file|
+  file.puts json
+end
 
 puts 'Goodbye'
